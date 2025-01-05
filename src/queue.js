@@ -13,24 +13,56 @@ const { NotImplementedError } = require('../extensions/index.js');
  * queue.dequeue(); // returns the top element from queue and deletes it, returns 1
  * queue.getUnderlyingList() // returns { value: 3, next: null }
  */
-class Queue {
+const { ListNode } = require('../extensions/list-node.js');
 
-  getUnderlyingList() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
   }
 
-  enqueue(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  enqueue(value) {
+    const newNode = new ListNode(value);
+    if (this.tail) {
+      this.tail.next = newNode;
+    }
+    this.tail = newNode;
+    if (!this.head) {
+      this.head = newNode;
+    }
   }
 
   dequeue() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.head) {
+      return null;
+    }
+    const value = this.head.value;
+    this.head = this.head.next;
+    if (!this.head) {
+      this.tail = null;
+    }
+    return value; 
+  }
+
+  getUnderlyingList() {
+    let currentNode = this.head;
+    let listRepresentation = null;
+    let lastNode = null;
+
+    while (currentNode) {
+      const newNode = new ListNode(currentNode.value);
+      if (!listRepresentation) {
+        listRepresentation = newNode;
+      } else {
+        lastNode.next = newNode;
+      }
+      lastNode = newNode;
+      currentNode = currentNode.next;
+    }
+
+    return listRepresentation;
   }
 }
-
 module.exports = {
   Queue
 };
